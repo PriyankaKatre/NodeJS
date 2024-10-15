@@ -4,6 +4,7 @@ import express from "express";
 const app = express();
 app.use(express.json());
 
+// It is good practice to add post number in .env file otherwise app will crash during deployment
 const PORT = process.env.PORT || 3000;
 
 let teaData = [];
