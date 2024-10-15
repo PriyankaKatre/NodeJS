@@ -1,9 +1,10 @@
-import express from 'express';
+import "dotenv/config";
+import express from "express";
 
 const app = express();
 app.use(express.json());
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 let teaData = [];
 let teaId = 1;
@@ -57,5 +58,5 @@ app.delete("/teas/:id", (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`app is running on ${PORT}`)
-})
+  console.log(`app is running on ${PORT}`);
+});
