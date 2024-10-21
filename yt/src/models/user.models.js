@@ -58,6 +58,9 @@ userSchema.method.isPasswordCorrect = async function (password){
     return await bcrypt.compare(password, this.password)
 }
 
+// Access Token has shorter live time
+// For each request access token goes to server and gets response
+//
 userSchema.method.generateAccesstoken = function() {
     return jwt.sign(
       {
@@ -71,7 +74,7 @@ userSchema.method.generateAccesstoken = function() {
     );
 }
 
-
+// Refresh Token has longer live time
 userSchema.method.generateRefreshtoken = function () {
   return jwt.sign(
     {
