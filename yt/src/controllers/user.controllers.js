@@ -11,7 +11,7 @@ import mongoose from "mongoose";
 
 const generateAccessAndRefreshToken = async (userId) => {
   try {
-    const user = User.findById(userId);
+    const user = await User.findById(userId);
 
     if (!user) {
       throw new ApiError(400, "User does not exits");
@@ -65,6 +65,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   try {
     coverImage = await uploadOnCloudinary(coverImageLocalPath);
+    console.log("user->", coverImage);
   } catch (err) {
     throw new ApiError(500, "Failed To Upload coverImage");
   }
@@ -135,6 +136,8 @@ const loginUser = asyncHandler(async (req, res) => {
     user._id,
   );
 
+  console.log("accessToken->", accessToken);
+
   const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken",
   );
@@ -161,8 +164,7 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
-  const incomingRefreshToken = req.cookie.refreshToken || req.body.refreshToken;
-
+  const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
   if (!incomingRefreshToken) {
     throw new ApiError(400, "Refresh token is required");
   }
@@ -207,6 +209,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
+    console.log("req.user._id,", req.user._id);
   await User.findByIdAndUpdate(
     req.user._id,
     {
